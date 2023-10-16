@@ -92,7 +92,7 @@ const customStyles = {
     padding: 0,
     border: 0,
     borderRadius: 0,
-    backgroundColor: 0,
+    backgroundColor: "none",
   },
   overlay: {
     width: "100%",

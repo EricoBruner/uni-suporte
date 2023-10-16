@@ -23,7 +23,7 @@ export default function SearchPage() {
         <SCCardList>
           {subjects?.suportOptions?.map((studentSupport) => {
             return (
-              <Link to={`/support/profile/${studentSupport.id}`}>
+              <Link to={`/search/${subject}/profile/${studentSupport.id}`}>
                 <SCCard>
                   <header>
                     <img src={studentSupport.image} alt="perfil image" />
@@ -84,6 +84,7 @@ const SCCardList = styled.div`
   flex-wrap: wrap;
   width: 100%;
   margin-top: 30px;
+  gap: 10px;
 `;
 
 const SCCard = styled.div`

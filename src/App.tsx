@@ -11,7 +11,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/search/:subject" element={<SearchPage />} />
           <Route
-            path="/support/profile/:userId"
+            path="/search/:subject/profile/:userId"
             element={<SupportProfilePage />}
           />
         </Routes>

@@ -2,12 +2,31 @@ import styled from "styled-components";
 import Header from "../components/Header";
 import { Link, useParams } from "react-router-dom";
 import RatingStars from "../components/RatingStars";
-import { SUPPORTOPTIONS } from "../data/supportOptionsBySubject";
+import { SUPPORTS } from "../data/supports";
+import { STUDENTS } from "../data/students";
+import { SUBJECTS } from "../data/subjects";
 
 export default function SearchPage() {
   const { subject } = useParams();
 
-  const subjects = SUPPORTOPTIONS.find((s: any) => s.name === subject);
+  const subjectId = SUBJECTS.find((s) => s.name === String(subject));
+
+  const filterSupports = SUPPORTS.filter((s) => s.subjectId === subjectId?.id);
+
+  const supports = filterSupports.map((support) => {
+    const student = STUDENTS.find(
+      (student) => student.id === support.studentId
+    );
+    const subject = SUBJECTS.find(
+      (subject) => subject.id === support.subjectId
+    );
+
+    return {
+      supportId: support.id,
+      student: student ? student : null,
+      subjectName: subject ? subject.name : "Não encontrado",
+    };
+  });
 
   return (
     <>
@@ -15,32 +34,32 @@ export default function SearchPage() {
       <SCContainer>
         <h1>{subject}</h1>
         <strong>
-          {subjects?.suportOptions
+          {supports.length != 0
             ? "Alunos aptos a prestar suporte"
             : "Não há alunos cadastrados nessa matéria"}
         </strong>
 
         <SCCardList>
-          {subjects?.suportOptions?.map((studentSupport) => {
+          {supports.map((support) => {
             return (
-              <Link to={`/search/${subject}/profile/${studentSupport.id}`}>
+              <Link to={`/search/${subject}/profile/${support.student?.id}`}>
                 <SCCard>
                   <header>
-                    <img src={studentSupport.image} alt="perfil image" />
-                    <strong>{studentSupport.name}</strong>
+                    <img src={support.student?.image} alt="perfil image" />
+                    <strong>{support.student?.name}</strong>
                   </header>
                   <div>
                     <div>
                       <strong>Suporte:</strong>
-                      <h1>{subjects.name}</h1>
+                      <h1>{support.subjectName}</h1>
                     </div>
                     <div>
                       <strong>Formação:</strong>
-                      <h2>{studentSupport.formation}</h2>
+                      <h2>{support.student?.formation}</h2>
                     </div>
                     <SCRatingBox>
                       <strong>Avaliação:</strong>
-                      <RatingStars rating={studentSupport.rating} />
+                      <RatingStars rating={support.student?.rating} />
                     </SCRatingBox>
                   </div>
                 </SCCard>

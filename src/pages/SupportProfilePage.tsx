@@ -1,26 +1,48 @@
 import styled from "styled-components";
 import Header from "../components/Header";
 import { useParams } from "react-router-dom";
-import { STUDENTSUPPORT } from "../data/studentSupport";
+import { STUDENTS } from "../data/students";
 import RatingStars from "../components/RatingStars";
-import { SUPPORTOPTIONS } from "../data/supportOptionsBySubject";
+import { SUPPORTS } from "../data/supports";
+import RequestSupportModal from "../components/Modals/RequestSupportModal";
+import { useState } from "react";
+import { SUBJECTS } from "../data/subjects";
 
 export default function SupportProfilePage() {
   const { subject, userId } = useParams();
 
-  const user = STUDENTSUPPORT.find((s) => s.id === parseInt(userId as string));
+  const subjectId = SUBJECTS.find((s) => s.name === String(subject));
+  const student = STUDENTS.find((s) => s.id === parseInt(userId as string));
 
-  const filterSubjects = SUPPORTOPTIONS.filter((materia) => {
-    if (materia.suportOptions) {
-      materia.suportOptions = materia.suportOptions.filter(
-        (option: any) => option.id === parseInt(userId as string)
-      );
-      return materia.suportOptions.length > 0; // Retorna verdadeiro se houver suportOptions após a filtragem
-    }
-    return false;
+  const filterSupports = SUPPORTS.filter(
+    (support) =>
+      support.studentId === student?.id && support.subjectId === subjectId?.id
+  );
+
+  const supports = filterSupports.map((support) => {
+    const student = STUDENTS.find(
+      (student) => student.id === support.studentId
+    );
+    const subject = SUBJECTS.find(
+      (subject) => subject.id === support.subjectId
+    );
+
+    return {
+      supportId: support.id,
+      student: student ? student : null,
+      subjectName: subject ? subject.name : "Não encontrado",
+    };
   });
 
-  console.log(userId);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
 
   return (
     <>
@@ -29,46 +51,52 @@ export default function SupportProfilePage() {
         <h1>{subject}</h1>
         <SCInfo>
           <div>
-            <h1>{user?.name}</h1>
+            <h1>{student?.name}</h1>
             <div>
               <strong>Formação:</strong>
-              <h2>{user?.formation}</h2>
+              <h2>{student?.formation}</h2>
             </div>
             <div>
               <strong>Disponibilidade:</strong>
-              <h2>{user?.availability}</h2>
+              <h2>{student?.availability}</h2>
             </div>
             <div>
               <strong>Avaliação:</strong>
-              <RatingStars rating={user?.rating} />
+              <RatingStars rating={student?.rating} />
             </div>
           </div>
-          <img src={user?.image} alt="perfil image" />
+          <img src={student?.image} alt="perfil image" />
         </SCInfo>
 
-        <strong>Matérias que {user?.name} está apto(a)!</strong>
+        <strong>Matérias que {student?.name} está apto(a)!</strong>
         <SCCardList>
-          {filterSubjects.map((subject) => {
-            return subject.suportOptions?.map((suportOption) => {
-              return (
-                <SCCard key={suportOption.id}>
+          {supports.map((support) => {
+            return (
+              <SCCard key={support.supportId}>
+                <div>
                   <div>
-                    <div>
-                      <strong>Suporte:</strong>
-                      <h1>{subject.name}</h1>
-                    </div>
-                    <div>
-                      <strong>Formação:</strong>
-                      <h2>{suportOption.formation}</h2>
-                    </div>
+                    <strong>Suporte:</strong>
+                    <h1>{support.subjectName}</h1>
                   </div>
-                  <SCButton>solicitar suporte</SCButton>
-                </SCCard>
-              );
-            });
+                  <div>
+                    <strong>Formação:</strong>
+                    <h2>{support.student?.formation}</h2>
+                  </div>
+                </div>
+                <SCButton onClick={() => openModal()}>
+                  solicitar suporte
+                </SCButton>
+              </SCCard>
+            );
           })}
         </SCCardList>
       </SCContainer>
+      <RequestSupportModal
+        isOpen={modalIsOpen}
+        closeModal={closeModal}
+        studentId={student?.id}
+        subject={subjectId}
+      />
     </>
   );
 }

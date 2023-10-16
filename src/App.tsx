@@ -2,6 +2,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
 import SupportProfilePage from "./pages/SupportProfilePage";
+import MySupportsPage from "./pages/MySupportsPage";
+import StudentSupport from "./pages/StudentSupport";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
             path="/search/:subject/profile/:userId"
             element={<SupportProfilePage />}
           />
+          <Route path="/supports/me" element={<MySupportsPage />} />
+          <Route path="/student-support/me" element={<StudentSupport />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -4,6 +4,7 @@ type Request = {
   course: string;
   period: string;
   subject: string;
+  status: string;
   file: File;
 };
 

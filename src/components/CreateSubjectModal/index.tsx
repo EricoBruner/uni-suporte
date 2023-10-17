@@ -31,6 +31,7 @@ export default function CreateSubjectModal({
       course: courseItem,
       period: periodItem,
       subject: subjectItem,
+      status: "pending",
       file: selectedFile,
     });
 

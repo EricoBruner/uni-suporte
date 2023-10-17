@@ -72,7 +72,7 @@ export default function StudentSupport() {
             <SCCardList>
               {subjects.map((subject) => {
                 return (
-                  <SCSubjectCard>
+                  <SCSubjectCard key={subject?.id}>
                     <strong>Suporte:</strong>
                     <h1>{subject?.subject?.name}</h1>
                     <div>
@@ -94,7 +94,7 @@ export default function StudentSupport() {
             <SCCardList>
               {supportRequests.map((support) => {
                 return (
-                  <SCRequestCard>
+                  <SCRequestCard key={support.id}>
                     <strong>Suporte:</strong>
                     <h1>{support.subject?.name}</h1>
                     <div>

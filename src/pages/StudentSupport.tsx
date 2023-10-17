@@ -4,7 +4,7 @@ import { SUBJECTS } from "../data/subjects";
 import { SUPPORTS } from "../data/supports";
 import { MYSUPPORTS } from "../data/mySupports";
 import { STUDENTS } from "../data/students";
-import CreateSubjectModal from "../components/Modals/CreateSubjectModal";
+import CreateSubjectModal from "../components/CreateSubjectModal";
 import { useState } from "react";
 
 export default function StudentSupport() {
@@ -129,7 +129,11 @@ export default function StudentSupport() {
           <h1>Aulas Agendadas</h1>
         </div>
       </SCContainer>
-      <CreateSubjectModal isOpen={modalIsOpen} closeModal={closeModal} />
+      <CreateSubjectModal
+        isOpen={modalIsOpen}
+        closeModal={closeModal}
+        studentId={1}
+      />
     </>
   );
 }

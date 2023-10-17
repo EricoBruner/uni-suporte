@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import Header from "../components/Header";
 import SubjectSelector from "../components/SubjectSelector";
+import { REQUESTS } from "../data/requests";
 
 export default function HomePage() {
+  console.log(REQUESTS);
+
   return (
     <>
       <Header />

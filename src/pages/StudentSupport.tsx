@@ -5,50 +5,14 @@ import { SUPPORTS } from "../data/supports";
 import { MYSUPPORTS } from "../data/mySupports";
 import { STUDENTS } from "../data/students";
 import CreateSubjectModal from "../components/CreateSubjectModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { REQUESTS } from "../data/requests";
 
 export default function StudentSupport() {
-  const filterSubjects = SUPPORTS.filter((support) => support.studentId === 1);
-
-  const subjects = filterSubjects.map((support) => {
-    const subject = SUBJECTS.find(
-      (subject) => subject.id === support.subjectId
-    );
-
-    if (support.studentId == 1) {
-      return {
-        ...support,
-        subject,
-      };
-    }
-  });
-
-  const filterSupports = MYSUPPORTS.filter(
-    (support) => support.studentSuportId === 1
-  );
-
-  const supportRequests = filterSupports.map((support) => {
-    const studentSuport = STUDENTS.find(
-      (student) => student.id === support.studentSuportId
-    );
-
-    const student = STUDENTS.find(
-      (student) => student.id === support.studentId
-    );
-
-    const subject = SUBJECTS.find(
-      (subject) => subject.id === support.subjectId
-    );
-
-    return {
-      ...support,
-      student,
-      studentSuport,
-      subject,
-    };
-  });
-
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [supports, setSupports] = useState<any>([]);
+  const [supportRequests, setSupportRequests] = useState<any>([]);
+  const [requests, setRequests] = useState<any>([]);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -58,8 +22,116 @@ export default function StudentSupport() {
     setModalIsOpen(false);
   };
 
-  //const pendingSupports = SUPPORTS.filter((s) => s.status === "pending");
-  //const finishedSupports = SUPPORTS.filter((s) => s.status === "finished");
+  const deleteSupport = (id: number) => {
+    SUPPORTS.splice(id, 1);
+
+    const filterSubjects = SUPPORTS.filter(
+      (support) => support.studentId === 1
+    );
+
+    const supports = filterSubjects.map((support) => {
+      const subject = SUBJECTS.find(
+        (subject) => subject.id === support.subjectId
+      );
+
+      if (support.studentId == 1) {
+        return {
+          ...support,
+          subject,
+        };
+      }
+    });
+
+    setSupports(supports);
+  };
+
+  const toggleSupportVisibility = (id: number) => {
+    const updatedSupports = SUPPORTS.map((s) => {
+      if (s.id === id) {
+        return { ...s, visible: !s.visible };
+      }
+      return s;
+    });
+
+    SUPPORTS.length = 0;
+    SUPPORTS.push(...updatedSupports);
+
+    const filterSubjects = SUPPORTS.filter(
+      (support) => support.studentId === 1
+    );
+
+    const supports = filterSubjects.map((support) => {
+      const subject = SUBJECTS.find(
+        (subject) => subject.id === support.subjectId
+      );
+
+      if (support.studentId == 1) {
+        return {
+          ...support,
+          subject,
+        };
+      }
+    });
+
+    setSupports(supports);
+  };
+
+  useEffect(() => {
+    const filterSubjects = SUPPORTS.filter(
+      (support) => support.studentId === 1
+    );
+    const supports = filterSubjects.map((support) => {
+      const subject = SUBJECTS.find(
+        (subject) => subject.id === support.subjectId
+      );
+
+      if (support.studentId == 1) {
+        return {
+          ...support,
+          subject,
+        };
+      }
+    });
+    setSupports(supports);
+
+    const filterSupports = MYSUPPORTS.filter(
+      (support) => support.studentSuportId === 1
+    );
+    const supportRequests = filterSupports.map((support) => {
+      const studentSuport = STUDENTS.find(
+        (student) => student.id === support.studentSuportId
+      );
+
+      const student = STUDENTS.find(
+        (student) => student.id === support.studentId
+      );
+
+      const subject = SUBJECTS.find(
+        (subject) => subject.id === support.subjectId
+      );
+
+      return {
+        ...support,
+        student,
+        studentSuport,
+        subject,
+      };
+    });
+    setSupportRequests(supportRequests);
+
+    const filterRequests = REQUESTS.filter((r) => r.studentId === 1);
+    const requests = filterRequests.map((request) => {
+      const student = STUDENTS.find((s) => s.id === request.studentId);
+
+      if (request.studentId == 1) {
+        return {
+          ...request,
+          student,
+        };
+      }
+    });
+    setRequests(requests);
+  }, [modalIsOpen]);
 
   return (
     <>
@@ -68,16 +140,32 @@ export default function StudentSupport() {
         <div>
           <button onClick={() => openModal()}>Adicionar Matéria</button>
           <h1>Matérias</h1>
-          {subjects.length != 0 ? (
+          {supports.length != 0 || requests.length != 0 ? (
             <SCCardList>
-              {subjects.map((subject) => {
+              {requests.map((request: any) => {
+                console.log(request);
+                return (
+                  <SCSubjectCard key={request?.id}>
+                    <strong>Suporte:</strong>
+                    <h1>{request?.subject?.name}</h1>
+                    <p>Em validação</p>
+                  </SCSubjectCard>
+                );
+              })}
+              {supports.map((subject: any) => {
                 return (
                   <SCSubjectCard key={subject?.id}>
                     <strong>Suporte:</strong>
                     <h1>{subject?.subject?.name}</h1>
                     <div>
-                      <button>Excluir</button>
-                      <button>Ocultar</button>
+                      <button onClick={() => deleteSupport(subject?.id)}>
+                        Excluir
+                      </button>
+                      <button
+                        onClick={() => toggleSupportVisibility(subject?.id)}
+                      >
+                        {subject?.visible ? "Ocultar" : "Desocultar"}
+                      </button>
                     </div>
                   </SCSubjectCard>
                 );
@@ -90,9 +178,9 @@ export default function StudentSupport() {
         <div>
           <button>Solicitações</button>
           <h1>Solicitações</h1>
-          {subjects.length != 0 ? (
+          {supports.length != 0 ? (
             <SCCardList>
-              {supportRequests.map((support) => {
+              {supportRequests.map((support: any) => {
                 return (
                   <SCRequestCard key={support.id}>
                     <strong>Suporte:</strong>
@@ -210,6 +298,15 @@ const SCSubjectCard = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+
+  > p {
+    margin-top: 30px;
+    color: #ff3740;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+  }
 
   > strong {
     color: #292929;

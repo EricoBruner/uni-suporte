@@ -1,1 +1,1 @@
-export const COURSE = [{ id: 1, name: "Piscicologia" }];
+export const COURSE = [{ id: 0, name: "Piscicologia" }];

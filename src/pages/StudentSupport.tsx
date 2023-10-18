@@ -76,6 +76,80 @@ export default function StudentSupport() {
     setSupports(supports);
   };
 
+  const acceptSupportRequest = (id: number) => {
+    const updatedSupportRequest = MYSUPPORTS.map((s) => {
+      if (s.id === id) {
+        return { ...s, status: "approved" };
+      }
+      return s;
+    });
+
+    MYSUPPORTS.length = 0;
+    MYSUPPORTS.push(...updatedSupportRequest);
+
+    const filterSupports = MYSUPPORTS.filter(
+      (support) => support.studentSuportId === 1
+    );
+    const supportRequests = filterSupports.map((support) => {
+      const studentSuport = STUDENTS.find(
+        (student) => student.id === support.studentSuportId
+      );
+
+      const student = STUDENTS.find(
+        (student) => student.id === support.studentId
+      );
+
+      const subject = SUBJECTS.find(
+        (subject) => subject.id === support.subjectId
+      );
+
+      return {
+        ...support,
+        student,
+        studentSuport,
+        subject,
+      };
+    });
+    setSupportRequests(supportRequests);
+  };
+
+  const refuseSupportRequest = (id: number) => {
+    const updatedSupportRequest = MYSUPPORTS.map((s) => {
+      if (s.id === id) {
+        return { ...s, status: "refused" };
+      }
+      return s;
+    });
+
+    MYSUPPORTS.length = 0;
+    MYSUPPORTS.push(...updatedSupportRequest);
+
+    const filterSupports = MYSUPPORTS.filter(
+      (support) => support.studentSuportId === 1
+    );
+    const supportRequests = filterSupports.map((support) => {
+      const studentSuport = STUDENTS.find(
+        (student) => student.id === support.studentSuportId
+      );
+
+      const student = STUDENTS.find(
+        (student) => student.id === support.studentId
+      );
+
+      const subject = SUBJECTS.find(
+        (subject) => subject.id === support.subjectId
+      );
+
+      return {
+        ...support,
+        student,
+        studentSuport,
+        subject,
+      };
+    });
+    setSupportRequests(supportRequests);
+  };
+
   useEffect(() => {
     const filterSubjects = SUPPORTS.filter(
       (support) => support.studentId === 1
@@ -95,7 +169,7 @@ export default function StudentSupport() {
     setSupports(supports);
 
     const filterSupports = MYSUPPORTS.filter(
-      (support) => support.studentSuportId === 1
+      (support) => support.studentSuportId === 1 && support.status === "pending"
     );
     const supportRequests = filterSupports.map((support) => {
       const studentSuport = STUDENTS.find(
@@ -178,7 +252,7 @@ export default function StudentSupport() {
         <div>
           <button>Solicitações</button>
           <h1>Solicitações</h1>
-          {supports.length != 0 ? (
+          {supportRequests.length != 0 ? (
             <SCCardList>
               {supportRequests.map((support: any) => {
                 return (
@@ -205,6 +279,14 @@ export default function StudentSupport() {
                         <h2>{support.studentSuport?.number}</h2>
                       </div>
                     </div>
+                    <SCButtonGroup>
+                      <button onClick={() => acceptSupportRequest(support?.id)}>
+                        Aceitar
+                      </button>
+                      <button onClick={() => refuseSupportRequest(support?.id)}>
+                        Recusar
+                      </button>
+                    </SCButtonGroup>
                   </SCRequestCard>
                 );
               })}
@@ -351,7 +433,7 @@ const SCSubjectCard = styled.div`
 
 const SCRequestCard = styled.div`
   width: 250px;
-  height: 200px;
+  height: auto;
   background: #f8f6f8;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
@@ -364,16 +446,52 @@ const SCRequestCard = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
 
+  > strong {
+    color: #292929;
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  > h1 {
+    margin-top: 10px;
+    color: #000;
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+  }
+
   > div {
-    display: flex;
-    box-sizing: border-box;
-    flex-direction: column;
-    width: 100%;
+    margin-top: 15px;
 
     > div {
       display: flex;
-      flex-direction: row;
       gap: 5px;
     }
+  }
+`;
+
+const SCButtonGroup = styled.p`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 13px;
+
+  > button {
+    margin-top: 20px;
+    width: 100%;
+    height: 40px;
+    color: #27658c;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    background: none;
+    border-radius: 4px;
+    border: 1px solid #27658c;
+    cursor: pointer;
   }
 `;

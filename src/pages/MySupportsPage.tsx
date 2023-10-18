@@ -23,6 +23,7 @@ export default function MySupportsPage() {
   const approvedSupports = supports.filter((s) => s.status === "approved");
   const pendingSupports = supports.filter((s) => s.status === "pending");
   const finishedSupports = supports.filter((s) => s.status === "finished");
+  const refusedSupports = supports.filter((s) => s.status === "refused");
 
   return (
     <>

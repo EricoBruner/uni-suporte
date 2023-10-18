@@ -88,7 +88,7 @@ export default function StudentSupport() {
     MYSUPPORTS.push(...updatedSupportRequest);
 
     const filterSupports = MYSUPPORTS.filter(
-      (support) => support.studentSuportId === 1
+      (support) => support.studentSuportId === 1 && support.status === "pending"
     );
     const supportRequests = filterSupports.map((support) => {
       const studentSuport = STUDENTS.find(
@@ -125,7 +125,7 @@ export default function StudentSupport() {
     MYSUPPORTS.push(...updatedSupportRequest);
 
     const filterSupports = MYSUPPORTS.filter(
-      (support) => support.studentSuportId === 1
+      (support) => support.studentSuportId === 1 && support.status === "pending"
     );
     const supportRequests = filterSupports.map((support) => {
       const studentSuport = STUDENTS.find(
@@ -207,6 +207,8 @@ export default function StudentSupport() {
     setRequests(requests);
   }, [modalIsOpen]);
 
+  console.log(supportRequests);
+
   return (
     <>
       <Header />
@@ -270,14 +272,8 @@ export default function StudentSupport() {
                       </div>
                     </div>
                     <div>
-                      <div>
-                        <strong>Aluno suporte:</strong>
-                        <h2>{support.studentSuport?.name}</h2>
-                      </div>
-                      <div>
-                        <strong>Contato:</strong>
-                        <h2>{support.studentSuport?.number}</h2>
-                      </div>
+                      <strong>Descrição:</strong>
+                      <p>{support.intention}</p>
                     </div>
                     <SCButtonGroup>
                       <button onClick={() => acceptSupportRequest(support?.id)}>
@@ -292,7 +288,7 @@ export default function StudentSupport() {
               })}
             </SCCardList>
           ) : (
-            <strong>Você ainda não cadastrou nenhuma matéria!</strong>
+            <strong>Não há nenhuma solicitação!</strong>
           )}
         </div>
         <div>
@@ -469,6 +465,9 @@ const SCRequestCard = styled.div`
     > div {
       display: flex;
       gap: 5px;
+
+      > strong {
+      }
     }
   }
 `;

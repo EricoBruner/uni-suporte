@@ -11,7 +11,9 @@ export default function SearchPage() {
 
   const subjectId = SUBJECTS.find((s) => s.name === String(subject));
 
-  const filterSupports = SUPPORTS.filter((s) => s.subjectId === subjectId?.id);
+  const filterSupports = SUPPORTS.filter(
+    (s) => s.subjectId === subjectId?.id && s.visible
+  );
 
   const supports = filterSupports.map((support) => {
     const student = STUDENTS.find(

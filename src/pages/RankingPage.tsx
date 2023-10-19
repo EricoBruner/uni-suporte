@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Header from "../components/Header";
-import SubjectSelector from "../components/SubjectSelector";
 
 export default function RankingPage() {
   return (

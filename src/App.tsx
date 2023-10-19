@@ -7,6 +7,7 @@ import StudentSupport from "./pages/StudentSupport";
 import RectoryPage from "./pages/RectoryPage";
 import AlertHomePage from "./pages/AlertHomePage";
 import RankingPage from "./pages/RankingPage";
+import FeedbacksPage from "./pages/FeedbacksPage";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/reitoria" element={<RectoryPage />} />
           <Route path="/alert" element={<AlertHomePage />} />
           <Route path="/ranking" element={<RankingPage />} />
+          <Route path="/feedbacks" element={<FeedbacksPage />} />
         </Routes>
       </BrowserRouter>
     </>

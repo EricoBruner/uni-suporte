@@ -2,12 +2,14 @@ import { useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
 import SelectRatingStars from "../RatingStars/SelectRatingStars";
+import { FEEDBACKS } from "../../data/feedbacks";
 
 export default function RefuseSupportModal({ isOpen, closeModal }: any) {
   const [message, setMessage] = useState("");
   const [question1, setQuestion1] = useState<boolean>();
   const [question2, setQuestion2] = useState<boolean>();
   const [question3, setQuestion3] = useState<boolean>();
+  const [rating, setRating] = useState<number>(0);
 
   const handleMessageChange = (event: any) => {
     setMessage(event.target.value);
@@ -28,9 +30,25 @@ export default function RefuseSupportModal({ isOpen, closeModal }: any) {
         break;
     }
   };
+
+  const sendFeedback = (e: any) => {
+    e.preventDefault();
+
+    const feedback = {
+      id: FEEDBACKS.length,
+      studentId: 1,
+      studentSuportId: 1,
+      rating: rating,
+      comment: message,
+    };
+
+    FEEDBACKS.push(feedback);
+    closeModal();
+  };
+
   return (
     <Modal isOpen={isOpen} style={customStyles}>
-      <SCContentForm onSubmit={closeModal}>
+      <SCContentForm onSubmit={sendFeedback}>
         <h1>Feedback</h1>
         <h2>Necessário dar um feedback de sua aula para continuar!</h2>
 
@@ -101,7 +119,7 @@ export default function RefuseSupportModal({ isOpen, closeModal }: any) {
         </label>
         <div>
           <strong>Avaliação:</strong>
-          <SelectRatingStars maxRating={5} />
+          <SelectRatingStars maxRating={5} setRating={setRating} />
         </div>
         <strong>Comentário:</strong>
         <textarea

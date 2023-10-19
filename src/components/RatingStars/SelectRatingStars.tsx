@@ -1,10 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-const SelectRatingStars = ({ maxRating }: any) => {
+const SelectRatingStars = ({ maxRating, setRating }: any) => {
   const [selectedRating, setSelectedRating] = useState(0);
 
   const handleStarClick = (starValue: any) => {
+    setRating(starValue);
     setSelectedRating(starValue);
   };
 

@@ -1,12 +1,19 @@
 import styled from "styled-components";
 import logoImage from "../../assets/logo.svg";
 import { Link, useLocation } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { STUDENTS } from "../../data/students";
+import { useState } from "react";
 
 export default function Header() {
   const location = useLocation();
   const imageUrl = STUDENTS.find((s) => s.name === "Evelyn Maria")?.image;
+
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
 
   return (
     <SCContainer>
@@ -56,9 +63,19 @@ export default function Header() {
       </div>
       <div>
         <SCVerticalLine />
-        <SCPerfil src={imageUrl} />
-        <IoIosArrowDown />
+        <SCPerfil src={imageUrl} onClick={() => toggleDropdown()} />
+        <button onClick={() => toggleDropdown()}>
+          {isDropdownOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+        </button>
       </div>
+      {isDropdownOpen && (
+        <div className={"dropdown-menu"}>
+          <SCDropdown>
+            <Link to={"/"}>Perfil</Link>
+            <Link to={"/feedbacks"}>Feedbacks</Link>
+          </SCDropdown>
+        </div>
+      )}
     </SCContainer>
   );
 }
@@ -74,6 +91,20 @@ const SCContainer = styled.div`
   background: #f8f6f8;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
 
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #f8f6f8;
+    box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 0 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 160px;
+    z-index: 1;
+  }
+
   > div {
     height: 100%;
     display: flex;
@@ -81,6 +112,13 @@ const SCContainer = styled.div`
     align-items: center;
     justify-content: center;
     padding-right: 40px;
+
+    > button {
+      display: flex;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
   }
 
   > div > nav {
@@ -110,6 +148,26 @@ const SCContainer = styled.div`
   }
 `;
 
+const SCDropdown = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  > a {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    height: 100%;
+    color: #616e84;
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    box-sizing: border-box;
+  }
+`;
+
 const SCVerticalLine = styled.div`
   border-left: 2px solid #b5bcc7;
   height: 60px;
@@ -122,6 +180,7 @@ const SCPerfil = styled.img`
   border-radius: 50%;
   background-color: gray;
   margin-right: 10px;
+  cursor: pointer;
 `;
 
 const SCBoxLogo = styled.div`

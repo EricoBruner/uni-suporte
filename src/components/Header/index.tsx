@@ -2,8 +2,11 @@ import styled from "styled-components";
 import logoImage from "../../assets/logo.svg";
 import { Link } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
+import { STUDENTS } from "../../data/students";
 
 export default function Header() {
+  const imageUrl = STUDENTS.find((s) => s.name === "Evelyn Maria")?.image;
+
   return (
     <SCContainer>
       <div>
@@ -23,7 +26,7 @@ export default function Header() {
       </div>
       <div>
         <SCVerticalLine />
-        <SCPerfil />
+        <SCPerfil src={imageUrl} />
         <IoIosArrowDown />
       </div>
     </SCContainer>
@@ -74,7 +77,7 @@ const SCVerticalLine = styled.div`
   margin-right: 70px;
 `;
 
-const SCPerfil = styled.div`
+const SCPerfil = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50%;

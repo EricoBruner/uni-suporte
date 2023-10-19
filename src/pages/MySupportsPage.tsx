@@ -23,7 +23,7 @@ export default function MySupportsPage() {
   const approvedSupports = supports.filter((s) => s.status === "approved");
   const pendingSupports = supports.filter((s) => s.status === "pending");
   const finishedSupports = supports.filter((s) => s.status === "finished");
-  //const refusedSupports = supports.filter((s) => s.status === "refused");
+  const refusedSupports = supports.filter((s) => s.status === "refused");
 
   return (
     <>
@@ -57,6 +57,10 @@ export default function MySupportsPage() {
                       <h2>{support.studentSuport?.number}</h2>
                     </div>
                   </div>
+                  <SCButtonGroup>
+                    <button>Reagendar</button>
+                    <button>Cancelar</button>
+                  </SCButtonGroup>
                 </SCCard>
               );
             })}
@@ -64,7 +68,7 @@ export default function MySupportsPage() {
         ) : (
           <strong>Não há matérias aqui!</strong>
         )}
-        <h1>Aguardando aprovação do aprendiz</h1>
+        <h1>Aguardando aprovação do aluno suporte</h1>
         {pendingSupports.length != 0 ? (
           <SCCardList>
             {pendingSupports.map((support) => {
@@ -82,16 +86,10 @@ export default function MySupportsPage() {
                       <h2>{support.time}</h2>
                     </div>
                   </div>
-                  <div>
-                    <div>
-                      <strong>Aluno suporte:</strong>
-                      <h2>{support.studentSuport?.name}</h2>
-                    </div>
-                    <div>
-                      <strong>Contato:</strong>
-                      <h2>{support.studentSuport?.number}</h2>
-                    </div>
-                  </div>
+                  <SCButtonGroup>
+                    <button>Reagendar</button>
+                    <button>Cancelar</button>
+                  </SCButtonGroup>
                 </SCCard>
               );
             })}
@@ -100,8 +98,31 @@ export default function MySupportsPage() {
           <strong>Não há matérias aqui!</strong>
         )}
         <h1>Histórico</h1>
-        {finishedSupports.length != 0 ? (
+        {finishedSupports.length != 0 || refusedSupports.length != 0 ? (
           <SCCardList>
+            {refusedSupports.map((support) => {
+              return (
+                <SCCard>
+                  <strong>Suporte:</strong>
+                  <h1>{support.subject?.name}</h1>
+                  <div>
+                    <div>
+                      <strong>Data:</strong>
+                      <h2>{support.date}</h2>
+                    </div>
+                    <div>
+                      <strong>Horário:</strong>
+                      <h2>{support.time}</h2>
+                    </div>
+                  </div>
+                  <div>
+                    <strong>Justificativa:</strong>
+                    <h2>{support.justification}</h2>
+                  </div>
+                  <h2>Status: Recusada</h2>
+                </SCCard>
+              );
+            })}
             {finishedSupports.map((support) => {
               return (
                 <SCCard>
@@ -168,7 +189,7 @@ const SCContainer = styled.div`
 
 const SCCard = styled.div`
   width: 250px;
-  height: 200px;
+  height: auto;
   background: #f8f6f8;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
@@ -181,16 +202,77 @@ const SCCard = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
 
+  > strong {
+    color: #292929;
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  > h1 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #000;
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  > h2 {
+    margin-top: 10px;
+    color: #000;
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+  }
+
   > div {
     display: flex;
     box-sizing: border-box;
     flex-direction: column;
     width: 100%;
+    gap: 5px;
+    margin-bottom: 5px;
+
+    > strong {
+      color: #292929;
+      font-family: Roboto;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    > h2 {
+      color: #292929;
+      font-family: Roboto;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+    }
 
     > div {
       display: flex;
       flex-direction: row;
       gap: 5px;
+
+      > strong {
+        color: #292929;
+        font-family: Roboto;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+      }
+
+      > h2 {
+        color: #292929;
+        font-family: Roboto;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+      }
     }
   }
 `;
@@ -201,4 +283,27 @@ const SCCardList = styled.div`
   width: 100%;
   margin-bottom: 35px;
   gap: 10px;
+`;
+
+const SCButtonGroup = styled.p`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 13px;
+
+  > button {
+    margin-top: 20px;
+    width: 100%;
+    height: 40px;
+    color: #fff;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    background: #27658c;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+  }
 `;

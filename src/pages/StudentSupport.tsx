@@ -7,12 +7,17 @@ import { STUDENTS } from "../data/students";
 import CreateSubjectModal from "../components/CreateSubjectModal";
 import { useEffect, useState } from "react";
 import { REQUESTS } from "../data/requests";
+import RefuseSupportModal from "../components/Modals/RefuseSupportModal";
 
 export default function StudentSupport() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [refuseSupportModalIsOpen, setRefuseSupportModalIsOpen] =
+    useState(false);
   const [supports, setSupports] = useState<any>([]);
   const [supportRequests, setSupportRequests] = useState<any>([]);
   const [requests, setRequests] = useState<any>([]);
+  const [approvedSupports, setApprovedSupports] = useState<any>([]);
+  const [supportId, setSupportId] = useState<number>();
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -20,6 +25,15 @@ export default function StudentSupport() {
 
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+
+  const refuseSupportModalCloseModal = () => {
+    setRefuseSupportModalIsOpen(false);
+  };
+
+  const refuseSupportModalOpenModal = (id: number) => {
+    setSupportId(id);
+    setRefuseSupportModalIsOpen(true);
   };
 
   const deleteSupport = (id: number) => {
@@ -113,43 +127,6 @@ export default function StudentSupport() {
     setSupportRequests(supportRequests);
   };
 
-  const refuseSupportRequest = (id: number) => {
-    const updatedSupportRequest = MYSUPPORTS.map((s) => {
-      if (s.id === id) {
-        return { ...s, status: "refused" };
-      }
-      return s;
-    });
-
-    MYSUPPORTS.length = 0;
-    MYSUPPORTS.push(...updatedSupportRequest);
-
-    const filterSupports = MYSUPPORTS.filter(
-      (support) => support.studentSuportId === 1 && support.status === "pending"
-    );
-    const supportRequests = filterSupports.map((support) => {
-      const studentSuport = STUDENTS.find(
-        (student) => student.id === support.studentSuportId
-      );
-
-      const student = STUDENTS.find(
-        (student) => student.id === support.studentId
-      );
-
-      const subject = SUBJECTS.find(
-        (subject) => subject.id === support.subjectId
-      );
-
-      return {
-        ...support,
-        student,
-        studentSuport,
-        subject,
-      };
-    });
-    setSupportRequests(supportRequests);
-  };
-
   useEffect(() => {
     const filterSubjects = SUPPORTS.filter(
       (support) => support.studentId === 1
@@ -205,9 +182,33 @@ export default function StudentSupport() {
       }
     });
     setRequests(requests);
-  }, [modalIsOpen]);
 
-  console.log(supportRequests);
+    const filterApprovedSupports = MYSUPPORTS.filter(
+      (support) =>
+        support.studentSuportId === 1 && support.status === "approved"
+    );
+    const approvedSupports = filterApprovedSupports.map((support) => {
+      const studentSuport = STUDENTS.find(
+        (student) => student.id === support.studentSuportId
+      );
+
+      const student = STUDENTS.find(
+        (student) => student.id === support.studentId
+      );
+
+      const subject = SUBJECTS.find(
+        (subject) => subject.id === support.subjectId
+      );
+
+      return {
+        ...support,
+        student,
+        studentSuport,
+        subject,
+      };
+    });
+    setApprovedSupports(approvedSupports);
+  }, [modalIsOpen, refuseSupportModalIsOpen, acceptSupportRequest]);
 
   return (
     <>
@@ -279,7 +280,9 @@ export default function StudentSupport() {
                       <button onClick={() => acceptSupportRequest(support?.id)}>
                         Aceitar
                       </button>
-                      <button onClick={() => refuseSupportRequest(support?.id)}>
+                      <button
+                        onClick={() => refuseSupportModalOpenModal(support?.id)}
+                      >
                         Recusar
                       </button>
                     </SCButtonGroup>
@@ -292,13 +295,59 @@ export default function StudentSupport() {
           )}
         </div>
         <div>
+          <SCWarningBox>
+            <strong>CUIDADO:</strong> Não esqueça de gravar a aula pela
+            plataforma escolhida para eventuais problemas com o feedback do
+            aluno aprendiz.
+          </SCWarningBox>
           <h1>Aulas Agendadas</h1>
+          {approvedSupports.length != 0 ? (
+            <SCCardList>
+              {approvedSupports.map((support: any) => {
+                return (
+                  <SCRequestCard key={support.id}>
+                    <strong>Suporte:</strong>
+                    <h1>{support.subject?.name}</h1>
+                    <div>
+                      <div>
+                        <strong>Data:</strong>
+                        <h2>{support.date}</h2>
+                      </div>
+                      <div>
+                        <strong>Horário:</strong>
+                        <h2>{support.time}</h2>
+                      </div>
+                    </div>
+                    <div>
+                      <strong>Descrição:</strong>
+                      <p>{support.intention}</p>
+                    </div>
+                    <SCButtonGroup>
+                      <button
+                        onClick={() => refuseSupportModalOpenModal(support.id)}
+                      >
+                        Cancelar
+                      </button>
+                      <div />
+                    </SCButtonGroup>
+                  </SCRequestCard>
+                );
+              })}
+            </SCCardList>
+          ) : (
+            <strong>Não há nenhuma aula agendada!</strong>
+          )}
         </div>
       </SCContainer>
       <CreateSubjectModal
         isOpen={modalIsOpen}
         closeModal={closeModal}
         studentId={1}
+      />
+      <RefuseSupportModal
+        isOpen={refuseSupportModalIsOpen}
+        closeModal={refuseSupportModalCloseModal}
+        supportId={supportId}
       />
     </>
   );
@@ -492,5 +541,31 @@ const SCButtonGroup = styled.p`
     border-radius: 4px;
     border: 1px solid #27658c;
     cursor: pointer;
+  }
+
+  > div {
+    width: 100%;
+  }
+`;
+
+const SCWarningBox = styled.div`
+  width: 100%;
+  height: auto;
+  padding: 10px;
+  background: #f8f6f8;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+  color: #292929;
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+
+  > strong {
+    color: #292929;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
   }
 `;

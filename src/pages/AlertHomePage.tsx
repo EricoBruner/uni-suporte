@@ -1,8 +1,16 @@
 import styled from "styled-components";
 import Header from "../components/Header";
 import SubjectSelector from "../components/SubjectSelector";
+import FeedbackSupportModal from "../components/Modals/RefuseSupportModal";
+import { useState } from "react";
 
-export default function HomePage() {
+export default function AlertHomePage() {
+  const [modalIsOpen, setModalIsOpen] = useState(true);
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
   return (
     <>
       <Header />
@@ -12,6 +20,7 @@ export default function HomePage() {
         <label>Selecione a matéria a qual deseja obter suporte</label>
         <SubjectSelector />
       </SCContainer>
+      <FeedbackSupportModal isOpen={modalIsOpen} closeModal={closeModal} />
     </>
   );
 }

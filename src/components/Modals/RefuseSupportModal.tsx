@@ -3,78 +3,48 @@ import Modal from "react-modal";
 import styled from "styled-components";
 import { MYSUPPORTS } from "../../data/mySupports";
 
-export default function RequestSupportModal({
+export default function RefuseSupportModal({
   isOpen,
   closeModal,
-  studentId,
-  subject,
+  supportId,
 }: any) {
-  const [selectedDate, setSelectedDate] = useState("");
-  const handleDateChange = (event: any) => {
-    setSelectedDate(event.target.value);
-  };
-
-  const [selectedTime, setSelectedTime] = useState("");
-  const handleTimeChange = (event: any) => {
-    setSelectedTime(event.target.value);
-  };
-
   const [message, setMessage] = useState("");
+
   const handleMessageChange = (event: any) => {
     setMessage(event.target.value);
   };
 
-  const sendData = (event: any) => {
-    event.preventDefault();
+  const refuseSupportRequest = (e: any) => {
+    e.preventDefault();
 
-    const support = {
-      id: MYSUPPORTS.length,
-      studentId: 1,
-      studentSuportId: studentId,
-      subjectId: subject.id,
-      date: selectedDate,
-      time: selectedTime,
-      status: "pending",
-      justification: null,
-      intention: message,
-    };
+    const updatedSupportRequest = MYSUPPORTS.map((s) => {
+      if (s.id === supportId) {
+        return { ...s, status: "refused", justification: message };
+      }
+      return s;
+    });
 
-    MYSUPPORTS.push(support);
+    MYSUPPORTS.length = 0;
+    MYSUPPORTS.push(...updatedSupportRequest);
+
     closeModal();
   };
 
   return (
     <Modal isOpen={isOpen} onRequestClose={closeModal} style={customStyles}>
-      <SCContentForm onSubmit={sendData}>
-        <h1>{subject.name}</h1>
-        <SCInputGroup>
-          <input
-            type="date"
-            id="data"
-            name="data"
-            value={selectedDate}
-            onChange={handleDateChange}
-            required
-          />
-          <input
-            type="time"
-            id="hora"
-            name="hora"
-            value={selectedTime}
-            onChange={handleTimeChange}
-            required
-          />
-        </SCInputGroup>
-        <strong>Escreva qual seu proposito com o suporte</strong>
+      <SCContentForm onSubmit={refuseSupportRequest}>
+        <h1>Recusar Solicitação</h1>
+        <strong>Justificativa:</strong>
         <textarea
           id="mensagem"
           name="mensagem"
           value={message}
+          placeholder="Sugerir um novo horário..."
           onChange={handleMessageChange}
           required
         />
         <SCButtonGroup>
-          <SCSendButton type="submit">Enviar solicitação</SCSendButton>
+          <SCSendButton type="submit">Recusar</SCSendButton>
           <SCCancelButton onClick={closeModal}>Cancelar</SCCancelButton>
         </SCButtonGroup>
       </SCContentForm>
@@ -118,12 +88,12 @@ const SCContentForm = styled.form`
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 
   > textarea {
     margin-top: 10px;
-    width: 100%;
+    width: 400px;
     height: 80px;
     border-radius: 5px;
     border: 1px solid #e0e0e0;
@@ -141,23 +111,6 @@ const SCContentForm = styled.form`
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
-  }
-`;
-
-const SCInputGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 400px;
-
-  > input {
-    width: 150px;
-    height: 40px;
-    border-radius: 5px;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    padding: 10px;
   }
 `;
 

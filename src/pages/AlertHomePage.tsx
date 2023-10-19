@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import Header from "../components/Header";
 import SubjectSelector from "../components/SubjectSelector";
-import FeedbackSupportModal from "../components/Modals/RefuseSupportModal";
 import { useState } from "react";
+import FeedbackSupportModal from "../components/Modals/FeedbackSupportModal";
 
 export default function AlertHomePage() {
   const [modalIsOpen, setModalIsOpen] = useState(true);

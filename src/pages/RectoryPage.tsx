@@ -154,11 +154,16 @@ const SCContainer = styled.div`
       align-items: center;
       flex-direction: column;
       padding: 15px;
-      border: 1px solid #b5bcc7;
+      border-top: 1px solid #b5bcc7;
       height: auto;
 
       > strong {
-        margin-top: 30px;
+        color: #292929;
+        font-family: Roboto;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 400;
+        margin-top: 35px;
       }
 
       > h1 {

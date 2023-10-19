@@ -235,7 +235,7 @@ const SCCard = styled.div`
     flex-direction: column;
     width: 100%;
     gap: 5px;
-    margin-bottom: 5px;
+    margin-top: 10px;
 
     > strong {
       color: #292929;

@@ -494,9 +494,10 @@ const SCRequestCard = styled.div`
   > strong {
     color: #292929;
     font-family: Roboto;
-    font-size: 12px;
+    font-size: 15px;
     font-style: normal;
     font-weight: 400;
+    margin-bottom: 35px;
   }
 
   > h1 {
@@ -510,12 +511,48 @@ const SCRequestCard = styled.div`
 
   > div {
     margin-top: 15px;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+    margin-bottom: 5px;
+
+    > strong {
+      color: #292929;
+      font-family: Roboto;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    p {
+      color: #292929;
+      font-family: Roboto;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+    }
 
     > div {
       display: flex;
+      flex-direction: row;
       gap: 5px;
 
       > strong {
+        color: #292929;
+        font-family: Roboto;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+      }
+
+      > h2 {
+        color: #292929;
+        font-family: Roboto;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
       }
     }
   }

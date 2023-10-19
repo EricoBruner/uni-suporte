@@ -1,26 +1,16 @@
 import styled from "styled-components";
 import Header from "../components/Header";
 import SubjectSelector from "../components/SubjectSelector";
-import { useState } from "react";
-import FeedbackSupportModal from "../components/Modals/FeedbackSupportModal";
 
-export default function AlertHomePage() {
-  const [modalIsOpen, setModalIsOpen] = useState(true);
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
+export default function RankingPage() {
   return (
     <>
       <Header />
       <SCContainer>
-        <strong>Bem-vindo(a), Evelyn! 👋</strong>
+        <strong>Ranking...</strong>
 
-        <label>Selecione a matéria a qual deseja obter suporte</label>
-        <SubjectSelector />
+        <label>Esta pagina ainda não está disponivel</label>
       </SCContainer>
-      <FeedbackSupportModal isOpen={modalIsOpen} closeModal={closeModal} />
     </>
   );
 }

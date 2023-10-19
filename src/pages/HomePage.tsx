@@ -23,6 +23,7 @@ const SCContainer = styled.div`
   padding-top: 150px;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 
   > strong {
     color: #292929;

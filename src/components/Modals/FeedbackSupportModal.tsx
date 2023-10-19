@@ -42,6 +42,7 @@ export default function RefuseSupportModal({ isOpen, closeModal }: any) {
             onChange={() =>
               handleQuestionChange(1, question1 === true ? false : true)
             }
+            required={question1 === undefined}
           />
           <strong>sim</strong>
           <input
@@ -50,6 +51,7 @@ export default function RefuseSupportModal({ isOpen, closeModal }: any) {
             onChange={() =>
               handleQuestionChange(1, question1 === false ? true : false)
             }
+            required={question1 === undefined}
           />
           <strong>não</strong>
         </label>
@@ -62,6 +64,7 @@ export default function RefuseSupportModal({ isOpen, closeModal }: any) {
             onChange={() =>
               handleQuestionChange(2, question2 === true ? false : true)
             }
+            required={question2 === undefined}
           />
           <strong>sim</strong>
           <input
@@ -70,6 +73,7 @@ export default function RefuseSupportModal({ isOpen, closeModal }: any) {
             onChange={() =>
               handleQuestionChange(2, question2 === false ? true : false)
             }
+            required={question2 === undefined}
           />
           <strong>não</strong>
         </label>
@@ -82,6 +86,7 @@ export default function RefuseSupportModal({ isOpen, closeModal }: any) {
             onChange={() =>
               handleQuestionChange(3, question3 === true ? false : true)
             }
+            required={question3 === undefined}
           />
           <strong>sim</strong>
           <input
@@ -90,6 +95,7 @@ export default function RefuseSupportModal({ isOpen, closeModal }: any) {
             onChange={() =>
               handleQuestionChange(3, question3 === false ? true : false)
             }
+            required={question3 === undefined}
           />
           <strong>não</strong>
         </label>
@@ -103,7 +109,7 @@ export default function RefuseSupportModal({ isOpen, closeModal }: any) {
           name="mensagem"
           value={message}
           onChange={handleMessageChange}
-          required
+          required={question1 === undefined}
         />
         <SCButtonGroup>
           <SCSendButton type="submit">Enviar</SCSendButton>

@@ -3,27 +3,75 @@ import Header from "../components/Header";
 import { MYSUPPORTS } from "../data/mySupports";
 import { STUDENTS } from "../data/students";
 import { SUBJECTS } from "../data/subjects";
+import { useEffect, useState } from "react";
+import RequestAgainSupportModal from "../components/Modals/RequestAgainSupportModal";
 
 export default function MySupportsPage() {
-  const supports = MYSUPPORTS.map((support) => {
-    const studentSuport = STUDENTS.find(
-      (student) => student.id === support.studentSuportId
-    );
-    const subject = SUBJECTS.find(
-      (subject) => subject.id === support.subjectId
-    );
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [subject, setSubject] = useState<any>({});
+  const [studentId, setStudentId] = useState<number>();
+  const [supports, setSupports] = useState<any>([]);
+  const [approvedSupports, setApprovedSupports] = useState<any>([]);
+  const [pendingSupports, setPendingSupports] = useState<any>([]);
+  const [finishedSupports, setFinishedSupports] = useState<any>([]);
+  const [refusedSupports, setRefusedSupports] = useState<any>([]);
 
-    return {
-      ...support,
-      studentSuport,
-      subject,
-    };
-  });
+  const cancelSupport = (supportId: number) => {
+    const updatedSupportRequest = MYSUPPORTS.map((s) => {
+      if (s.id === supportId) {
+        return {
+          ...s,
+          status: "canceled",
+          justification: "Cancelada por você",
+        };
+      }
+      return s;
+    });
 
-  const approvedSupports = supports.filter((s) => s.status === "approved");
-  const pendingSupports = supports.filter((s) => s.status === "pending");
-  const finishedSupports = supports.filter((s) => s.status === "finished");
-  const refusedSupports = supports.filter((s) => s.status === "refused");
+    MYSUPPORTS.length = 0;
+    MYSUPPORTS.push(...updatedSupportRequest);
+
+    setSupports("atualizar");
+  };
+
+  const openModal = (subject: any, studentId: number) => {
+    setSubject(subject);
+    setStudentId(studentId);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  useEffect(() => {
+    const mapSupports = MYSUPPORTS.map((support) => {
+      const studentSuport = STUDENTS.find(
+        (student) => student.id === support.studentSuportId
+      );
+      const subject = SUBJECTS.find(
+        (subject) => subject.id === support.subjectId
+      );
+
+      return {
+        ...support,
+        studentSuport,
+        subject,
+      };
+    });
+
+    const approvedSupports = mapSupports.filter((s) => s.status === "approved");
+    setApprovedSupports(approvedSupports);
+    const pendingSupports = mapSupports.filter((s) => s.status === "pending");
+    setPendingSupports(pendingSupports);
+    const finishedSupports = mapSupports.filter((s) => s.status === "finished");
+    setFinishedSupports(finishedSupports);
+    const canceledSupports = mapSupports.filter((s) => s.status === "canceled");
+    const refusedSupports = canceledSupports.concat(
+      mapSupports.filter((s) => s.status === "refused")
+    );
+    setRefusedSupports(refusedSupports);
+  }, [supports, modalIsOpen]);
 
   return (
     <>
@@ -32,9 +80,9 @@ export default function MySupportsPage() {
         <h1>Aulas agendadas</h1>
         {approvedSupports.length != 0 ? (
           <SCCardList>
-            {approvedSupports.map((support) => {
+            {approvedSupports.map((support: any) => {
               return (
-                <SCCard>
+                <SCCard key={support.id}>
                   <strong>Suporte:</strong>
                   <h1>{support.subject?.name}</h1>
                   <div>
@@ -58,8 +106,16 @@ export default function MySupportsPage() {
                     </div>
                   </div>
                   <SCButtonGroup>
-                    <button>Reagendar</button>
-                    <button>Cancelar</button>
+                    <button
+                      onClick={() =>
+                        openModal(support.subject, support.studentSuport.id)
+                      }
+                    >
+                      Reagendar
+                    </button>
+                    <button onClick={() => cancelSupport(support.id)}>
+                      Cancelar
+                    </button>
                   </SCButtonGroup>
                 </SCCard>
               );
@@ -71,9 +127,9 @@ export default function MySupportsPage() {
         <h1>Aguardando aprovação do aluno suporte</h1>
         {pendingSupports.length != 0 ? (
           <SCCardList>
-            {pendingSupports.map((support) => {
+            {pendingSupports.map((support: any) => {
               return (
-                <SCCard>
+                <SCCard key={support.id}>
                   <strong>Suporte:</strong>
                   <h1>{support.subject?.name}</h1>
                   <div>
@@ -87,8 +143,16 @@ export default function MySupportsPage() {
                     </div>
                   </div>
                   <SCButtonGroup>
-                    <button>Reagendar</button>
-                    <button>Cancelar</button>
+                    <button
+                      onClick={() =>
+                        openModal(support.subject, support.studentSuport.id)
+                      }
+                    >
+                      Reagendar
+                    </button>
+                    <button onClick={() => cancelSupport(support.id)}>
+                      Cancelar
+                    </button>
                   </SCButtonGroup>
                 </SCCard>
               );
@@ -100,7 +164,7 @@ export default function MySupportsPage() {
         <h1>Histórico</h1>
         {finishedSupports.length != 0 || refusedSupports.length != 0 ? (
           <SCCardList>
-            {refusedSupports.map((support) => {
+            {refusedSupports.map((support: any) => {
               return (
                 <SCCard>
                   <strong>Suporte:</strong>
@@ -119,11 +183,16 @@ export default function MySupportsPage() {
                     <strong>Justificativa:</strong>
                     <h2>{support.justification}</h2>
                   </div>
-                  <h2>Status: Recusada</h2>
+                  <h2>
+                    Status:
+                    {support.status == "canceled" && " Cancelada"}
+                    {support.status == "refused" && " Recusada"}
+                    {support.status == "finished" && " Concluída"}
+                  </h2>
                 </SCCard>
               );
             })}
-            {finishedSupports.map((support) => {
+            {finishedSupports.map((support: any) => {
               return (
                 <SCCard>
                   <strong>Suporte:</strong>
@@ -156,6 +225,12 @@ export default function MySupportsPage() {
           <strong>Não há matérias aqui!</strong>
         )}
       </SCContainer>
+      <RequestAgainSupportModal
+        isOpen={modalIsOpen}
+        closeModal={closeModal}
+        studentId={studentId}
+        subject={subject}
+      />
     </>
   );
 }

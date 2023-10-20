@@ -8,10 +8,13 @@ import CreateSubjectModal from "../components/CreateSubjectModal";
 import { useEffect, useState } from "react";
 import { REQUESTS } from "../data/requests";
 import RefuseSupportModal from "../components/Modals/RefuseSupportModal";
+import CancelSupportModal from "../components/Modals/CancelSupportModal";
 
 export default function StudentSupport() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [refuseSupportModalIsOpen, setRefuseSupportModalIsOpen] =
+    useState(false);
+  const [cancelSupportModalIsOpen, setCancelSupportModalIsOpen] =
     useState(false);
   const [supports, setSupports] = useState<any>([]);
   const [supportRequests, setSupportRequests] = useState<any>([]);
@@ -34,6 +37,15 @@ export default function StudentSupport() {
   const refuseSupportModalOpenModal = (id: number) => {
     setSupportId(id);
     setRefuseSupportModalIsOpen(true);
+  };
+
+  const cancelSupportModalCloseModal = () => {
+    setCancelSupportModalIsOpen(false);
+  };
+
+  const cancelSupportModalOpenModal = (id: number) => {
+    setSupportId(id);
+    setCancelSupportModalIsOpen(true);
   };
 
   const deleteSupport = (id: number) => {
@@ -208,7 +220,7 @@ export default function StudentSupport() {
       };
     });
     setApprovedSupports(approvedSupports);
-  }, [modalIsOpen, refuseSupportModalIsOpen, acceptSupportRequest]);
+  }, [modalIsOpen, refuseSupportModalIsOpen]);
 
   return (
     <>
@@ -231,7 +243,10 @@ export default function StudentSupport() {
               })}
               {supports.map((subject: any) => {
                 return (
-                  <SCSubjectCard key={subject?.id}>
+                  <SCSubjectCard
+                    key={subject?.id}
+                    className={subject.visible ? "" : "hidden"}
+                  >
                     <strong>Suporte:</strong>
                     <h1>{subject?.subject?.name}</h1>
                     <div>
@@ -319,12 +334,19 @@ export default function StudentSupport() {
                       </div>
                     </div>
                     <div>
-                      <strong>Descrição:</strong>
-                      <p>{support.intention}</p>
+                      <div>
+                        <strong>Aluno:</strong>
+                        <h2>{support.student?.name}</h2>
+                      </div>
+                      <div>
+                        <p>
+                          <strong>Descrição:</strong> {support.intention}
+                        </p>
+                      </div>
                     </div>
                     <SCButtonGroup>
                       <button
-                        onClick={() => refuseSupportModalOpenModal(support.id)}
+                        onClick={() => cancelSupportModalOpenModal(support.id)}
                       >
                         Cancelar
                       </button>
@@ -347,6 +369,11 @@ export default function StudentSupport() {
       <RefuseSupportModal
         isOpen={refuseSupportModalIsOpen}
         closeModal={refuseSupportModalCloseModal}
+        supportId={supportId}
+      />
+      <CancelSupportModal
+        isOpen={cancelSupportModalIsOpen}
+        closeModal={cancelSupportModalCloseModal}
         supportId={supportId}
       />
     </>
@@ -426,6 +453,10 @@ const SCSubjectCard = styled.div`
   flex-direction: column;
   box-sizing: border-box;
 
+  &.hidden {
+    background: #b6b6b6;
+  }
+
   > p {
     margin-top: 30px;
     color: #ff3740;
@@ -433,6 +464,14 @@ const SCSubjectCard = styled.div`
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
+
+    > strong {
+      color: #292929;
+      font-family: Roboto;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+    }
   }
 
   > strong {
@@ -468,7 +507,7 @@ const SCSubjectCard = styled.div`
       font-size: 14px;
       font-style: normal;
       font-weight: 700;
-      background: none;
+      background: #f8f6f8;
       border-radius: 4px;
       border: 1px solid #27658c;
       cursor: pointer;
@@ -497,7 +536,7 @@ const SCRequestCard = styled.div`
     font-size: 15px;
     font-style: normal;
     font-weight: 400;
-    margin-bottom: 35px;
+    margin-bottom: 5px;
   }
 
   > h1 {

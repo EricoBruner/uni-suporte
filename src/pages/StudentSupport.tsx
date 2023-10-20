@@ -112,31 +112,6 @@ export default function StudentSupport() {
 
     MYSUPPORTS.length = 0;
     MYSUPPORTS.push(...updatedSupportRequest);
-
-    const filterSupports = MYSUPPORTS.filter(
-      (support) => support.studentSuportId === 1 && support.status === "pending"
-    );
-    const supportRequests = filterSupports.map((support) => {
-      const studentSuport = STUDENTS.find(
-        (student) => student.id === support.studentSuportId
-      );
-
-      const student = STUDENTS.find(
-        (student) => student.id === support.studentId
-      );
-
-      const subject = SUBJECTS.find(
-        (subject) => subject.id === support.subjectId
-      );
-
-      return {
-        ...support,
-        student,
-        studentSuport,
-        subject,
-      };
-    });
-    setSupportRequests(supportRequests);
   };
 
   useEffect(() => {
@@ -220,7 +195,7 @@ export default function StudentSupport() {
       };
     });
     setApprovedSupports(approvedSupports);
-  }, [modalIsOpen, refuseSupportModalIsOpen]);
+  }, [modalIsOpen, refuseSupportModalIsOpen, acceptSupportRequest]);
 
   return (
     <>

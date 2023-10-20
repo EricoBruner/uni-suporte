@@ -1,9 +1,8 @@
 export const STUDENTS = [
   {
     id: 1,
-    name: "Evelyn Maria",
-    image:
-      "https://pps.whatsapp.net/v/t61.24694-24/370975393_331873575969691_1698169209009283691_n.jpg?ccb=11-4&oh=01_AdRyv2tU345yqhv-REVMuvUSkjsq3XoB74pRb8tTkt8CXg&oe=6536BB54&_nc_sid=000000&_nc_cat=104",
+    name: "Fulano Ciclano",
+    image: "https://www.promoview.com.br/uploads/images/unnamed%2819%29.png",
     formation: "Piscicologia 2° período",
     availability: "Estou disponivel a noite até as 22:00",
     rating: 5,

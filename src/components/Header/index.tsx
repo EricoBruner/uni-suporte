@@ -7,7 +7,7 @@ import { useState } from "react";
 
 export default function Header() {
   const location = useLocation();
-  const imageUrl = STUDENTS.find((s) => s.name === "Evelyn Maria")?.image;
+  const imageUrl = STUDENTS.find((s) => s.name === "Fulano Ciclano")?.image;
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 

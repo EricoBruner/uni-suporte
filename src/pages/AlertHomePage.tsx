@@ -15,7 +15,7 @@ export default function AlertHomePage() {
     <>
       <Header />
       <SCContainer>
-        <strong>Bem-vindo(a), Evelyn! 👋</strong>
+        <strong>Bem-vindo(a), Fulano! 👋</strong>
 
         <label>Selecione a matéria a qual deseja obter suporte</label>
         <SubjectSelector />

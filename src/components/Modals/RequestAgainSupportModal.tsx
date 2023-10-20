@@ -7,6 +7,7 @@ export default function RequestAgainSupportModal({
   isOpen,
   closeModal,
   subject,
+  requestId,
 }: any) {
   const [selectedDate, setSelectedDate] = useState("");
   const handleDateChange = (event: any) => {
@@ -27,9 +28,10 @@ export default function RequestAgainSupportModal({
     event.preventDefault();
 
     const updatedRequests = MYSUPPORTS.map((r) => {
-      if (r.id === subject.id) {
+      if (r.id === requestId) {
         return {
           ...r,
+          status: "pending",
           date: selectedDate,
           time: selectedTime,
           intention: message,

@@ -9,7 +9,7 @@ import RequestAgainSupportModal from "../components/Modals/RequestAgainSupportMo
 export default function MySupportsPage() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [subject, setSubject] = useState<any>({});
-  const [studentId, setStudentId] = useState<number>();
+  const [requestId, setRequestId] = useState<number>();
   const [supports, setSupports] = useState<any>([]);
   const [approvedSupports, setApprovedSupports] = useState<any>([]);
   const [pendingSupports, setPendingSupports] = useState<any>([]);
@@ -34,9 +34,9 @@ export default function MySupportsPage() {
     setSupports("atualizar");
   };
 
-  const openModal = (subject: any, studentId: number) => {
+  const openModal = (subject: any, requestId: number) => {
     setSubject(subject);
-    setStudentId(studentId);
+    setRequestId(requestId);
     setModalIsOpen(true);
   };
 
@@ -107,9 +107,7 @@ export default function MySupportsPage() {
                   </div>
                   <SCButtonGroup>
                     <button
-                      onClick={() =>
-                        openModal(support.subject, support.studentSuport.id)
-                      }
+                      onClick={() => openModal(support.subject, support.id)}
                     >
                       Reagendar
                     </button>
@@ -144,9 +142,7 @@ export default function MySupportsPage() {
                   </div>
                   <SCButtonGroup>
                     <button
-                      onClick={() =>
-                        openModal(support.subject, support.studentSuport.id)
-                      }
+                      onClick={() => openModal(support.subject, support.id)}
                     >
                       Reagendar
                     </button>
@@ -186,9 +182,18 @@ export default function MySupportsPage() {
                   <h2>
                     Status:
                     {support.status == "canceled" && " Cancelada"}
-                    {support.status == "refused" && " Recusada"}
                     {support.status == "finished" && " Concluída"}
+                    {support.status == "refused" && " Recusada"}
                   </h2>
+                  <SCButtonGroup>
+                    {support.status == "refused" && (
+                      <button
+                        onClick={() => openModal(support.subject, support.id)}
+                      >
+                        Reagendar
+                      </button>
+                    )}
+                  </SCButtonGroup>
                 </SCCard>
               );
             })}
@@ -228,8 +233,8 @@ export default function MySupportsPage() {
       <RequestAgainSupportModal
         isOpen={modalIsOpen}
         closeModal={closeModal}
-        studentId={studentId}
         subject={subject}
+        requestId={requestId}
       />
     </>
   );

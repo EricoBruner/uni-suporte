@@ -8,35 +8,31 @@ import RequestSupportModal from "../components/Modals/RequestSupportModal";
 import { useState } from "react";
 import { SUBJECTS } from "../data/subjects";
 
-export default function SupportProfilePage() {
-  const { subject, userId } = useParams();
+export default function ProfilePage() {
+  const { id } = useParams();
+  const [subject, setSubject] = useState<any>([]);
 
-  const subjectId = SUBJECTS.find((s) => s.name === String(subject));
-  const student = STUDENTS.find((s) => s.id === parseInt(userId as string));
+  const student = STUDENTS.find((s) => s.id === parseInt(id as string));
 
   const filterSupports = SUPPORTS.filter(
-    (support) =>
-      support.studentId === student?.id && support.subjectId === subjectId?.id
+    (support) => support.studentId === student?.id
   );
 
   const supports = filterSupports.map((support) => {
-    const student = STUDENTS.find(
-      (student) => student.id === support.studentId
-    );
-    const subject = SUBJECTS.find(
-      (subject) => subject.id === support.subjectId
-    );
+    const stu = STUDENTS.find((student) => student.id === support.studentId);
+    const su = SUBJECTS.find((s) => s.id === support.subjectId);
 
     return {
       supportId: support.id,
-      student: student ? student : null,
-      subjectName: subject ? subject.name : "Não encontrado",
+      student: stu ? stu : null,
+      subject: su ? su : null,
     };
   });
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const openModal = () => {
+  const openModal = (subject: any) => {
+    setSubject(subject);
     setModalIsOpen(true);
   };
 
@@ -44,11 +40,12 @@ export default function SupportProfilePage() {
     setModalIsOpen(false);
   };
 
+  console.log(subject);
+
   return (
     <>
       <Header />
       <SCContainer>
-        <h1>{subject}</h1>
         <SCInfo>
           <div>
             <h1>{student?.name}</h1>
@@ -80,14 +77,14 @@ export default function SupportProfilePage() {
                 <div>
                   <div>
                     <strong>Suporte:</strong>
-                    <h1>{support.subjectName}</h1>
+                    <h1>{support.subject?.name}</h1>
                   </div>
                   <div>
                     <strong>Formação:</strong>
                     <h2>{support.student?.formation}</h2>
                   </div>
                 </div>
-                <SCButton onClick={() => openModal()}>
+                <SCButton onClick={() => openModal(support.subject)}>
                   solicitar suporte
                 </SCButton>
               </SCCard>
@@ -99,7 +96,7 @@ export default function SupportProfilePage() {
         isOpen={modalIsOpen}
         closeModal={closeModal}
         studentId={student?.id}
-        subject={subjectId}
+        subject={subject}
       />
     </>
   );

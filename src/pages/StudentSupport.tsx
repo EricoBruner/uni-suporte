@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { REQUESTS } from "../data/requests";
 import RefuseSupportModal from "../components/Modals/RefuseSupportModal";
 import CancelSupportModal from "../components/Modals/CancelSupportModal";
+import { Link } from "react-router-dom";
 
 export default function StudentSupport() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -310,13 +311,29 @@ export default function StudentSupport() {
                     </div>
                     <div>
                       <div>
-                        <strong>Aluno:</strong>
-                        <h2>{support.student?.name}</h2>
+                        <strong>Aluno Aprendiz:</strong>
+                        <h2>
+                          <Link to={`/profile/${support.student?.id}`}>
+                            {support.student?.name}
+                          </Link>
+                        </h2>
                       </div>
                       <div>
                         <p>
                           <strong>Descrição:</strong> {support.intention}
                         </p>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <h2>
+                          <a
+                            href={"https://meet.google.com/smt-ptox-hme"}
+                            target="_blank"
+                          >
+                            Clique aqui para acessar a aula
+                          </a>
+                        </h2>
                       </div>
                     </div>
                     <SCButtonGroup>

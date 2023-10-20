@@ -5,6 +5,7 @@ import { STUDENTS } from "../data/students";
 import { SUBJECTS } from "../data/subjects";
 import { useEffect, useState } from "react";
 import RequestAgainSupportModal from "../components/Modals/RequestAgainSupportModal";
+import { Link } from "react-router-dom";
 
 export default function MySupportsPage() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -98,11 +99,27 @@ export default function MySupportsPage() {
                   <div>
                     <div>
                       <strong>Aluno suporte:</strong>
-                      <h2>{support.studentSuport?.name}</h2>
+                      <h2>
+                        <Link to={`/profile/${support.studentSuport?.id}`}>
+                          {support.studentSuport?.name}
+                        </Link>
+                      </h2>
                     </div>
                     <div>
                       <strong>Contato:</strong>
                       <h2>{support.studentSuport?.number}</h2>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <h2>
+                        <a
+                          href={"https://meet.google.com/smt-ptox-hme"}
+                          target="_blank"
+                        >
+                          Clique aqui para acessar a aula
+                        </a>
+                      </h2>
                     </div>
                   </div>
                   <SCButtonGroup>
@@ -215,7 +232,11 @@ export default function MySupportsPage() {
                   <div>
                     <div>
                       <strong>Aluno suporte:</strong>
-                      <h2>{support.studentSuport?.name}</h2>
+                      <h2>
+                        <Link to={`/profile/${support.studentSuport?.id}`}>
+                          {support.studentSuport?.name}
+                        </Link>
+                      </h2>
                     </div>
                     <div>
                       <strong>Contato:</strong>

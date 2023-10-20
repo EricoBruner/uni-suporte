@@ -1,7 +1,7 @@
 export const STUDENTS = [
   {
     id: 1,
-    name: "Fulano Ciclano",
+    name: "Fulano da Silva",
     image: "https://www.promoview.com.br/uploads/images/unnamed%2819%29.png",
     formation: "Piscicologia 2° período",
     availability: "Estou disponivel a noite até as 22:00",

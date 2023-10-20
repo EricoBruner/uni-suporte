@@ -8,6 +8,7 @@ import RectoryPage from "./pages/RectoryPage";
 import AlertHomePage from "./pages/AlertHomePage";
 import RankingPage from "./pages/RankingPage";
 import FeedbacksPage from "./pages/FeedbacksPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/alert" element={<AlertHomePage />} />
           <Route path="/ranking" element={<RankingPage />} />
           <Route path="/feedbacks" element={<FeedbacksPage />} />
+          <Route path="/profile/:id" element={<ProfilePage />} />
         </Routes>
       </BrowserRouter>
     </>

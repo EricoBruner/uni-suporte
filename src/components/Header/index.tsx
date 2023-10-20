@@ -7,7 +7,7 @@ import { useState } from "react";
 
 export default function Header() {
   const location = useLocation();
-  const imageUrl = STUDENTS.find((s) => s.name === "Fulano Ciclano")?.image;
+  const imageUrl = STUDENTS.find((s) => s.id === 1)?.image;
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
@@ -71,7 +71,7 @@ export default function Header() {
       {isDropdownOpen && (
         <div className={"dropdown-menu"}>
           <SCDropdown>
-            <Link to={"/"}>Perfil</Link>
+            <Link to={"/profile/1"}>Perfil</Link>
             <Link to={"/feedbacks"}>Feedbacks</Link>
           </SCDropdown>
         </div>
